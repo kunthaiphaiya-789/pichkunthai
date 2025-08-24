@@ -1,13 +1,5 @@
 {
   "rewrites": [
-    { "source": "/old-cv", "destination": "/PichkunthaiCV.html" }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Frame-Options", "value": "DENY" }
-      ]
-    }
+    { "source": "/", "destination": "/pichkunthaicv.html" }
   ]
 }
