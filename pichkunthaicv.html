@@ -15,7 +15,7 @@
         body {
             font-family: 'Inter', sans-serif;
             transition: background-color 0.3s ease, color 0.3s ease;
-            overflow: hidden; /* Prevent body scroll, main content handles scroll */
+            overflow-x: hidden; /* Prevent horizontal scroll from mobile menu */
         }
         body.dark {
             background-color: #0055ff; /* Dark background */
@@ -53,7 +53,7 @@
             overflow-y: auto; /* Allow scrolling within the sidebar if content is long */
             padding: 2rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 10;
+            z-index: 20; /* Ensure sidebar is above main content */
         }
 
         /* Main Content Area Styling */
@@ -64,6 +64,61 @@
             padding: 2rem;
         }
 
+        /* Mobile Menu Styles */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.95); /* Semi-transparent white */
+            backdrop-filter: blur(8px); /* Blur effect */
+            z-index: 50; /* Above everything else */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transform: translateX(100%); /* Start off-screen to the right */
+            transition: transform 0.4s ease-in-out;
+        }
+        body.dark .mobile-menu {
+            background-color: rgba(45, 55, 72, 0.95); /* Darker semi-transparent */
+        }
+        .mobile-menu.active {
+            transform: translateX(0); /* Slide in */
+        }
+        .mobile-menu-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 2.5rem;
+            color: #3b82f6; /* Blue-600 */
+            cursor: pointer;
+        }
+        body.dark .mobile-menu-close {
+            color: #63b3ed; /* Light blue */
+        }
+        .mobile-nav-list a {
+            font-size: 1.5rem;
+            padding: 0.75rem 1.5rem;
+            display: block;
+            text-align: center;
+            color: #1a202c; /* Dark text */
+            transition: color 0.3s ease, background-color 0.3s ease;
+            border-radius: 0.5rem;
+        }
+        body.dark .mobile-nav-list a {
+            color: #e2e8f0; /* Light text */
+        }
+        .mobile-nav-list a:hover {
+            background-color: #e0f2fe; /* Light blue hover */
+            color: #2563eb; /* Darker blue text */
+        }
+        body.dark .mobile-nav-list a:hover {
+            background-color: #4a5568; /* Darker hover */
+            color: #90cdf4; /* Lighter blue text */
+        }
+
         /* Responsive adjustments for smaller screens */
         @media (max-width: 768px) {
             .aside {
@@ -72,6 +127,7 @@
                 position: relative;
                 box-shadow: none;
                 border-bottom: 1px solid #e2e8f0;
+                padding: 1rem; /* Adjust padding for mobile */
             }
             body.dark .aside {
                 border-bottom-color: #4a5568;
@@ -81,14 +137,24 @@
                 padding-top: 1rem; /* Adjust padding after sidebar */
             }
             .aside-nav-list {
-                flex-direction: row; /* Horizontal navigation on small screens */
-                justify-content: space-around;
-                flex-wrap: wrap;
+                display: none; /* Hide desktop navigation on small screens */
             }
-            .aside-nav-list li {
-                margin-bottom: 0.5rem;
-                width: 45%; /* Two columns */
-                text-align: center;
+            .hamburger-menu {
+                display: block; /* Show hamburger on small screens */
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                z-index: 60; /* Above mobile menu */
+                background-color: #3b82f6;
+                color: white;
+                padding: 0.5rem 0.75rem;
+                border-radius: 0.5rem;
+                cursor: pointer;
+                font-size: 1.5rem;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            }
+            body.dark .hamburger-menu {
+                background-color: #63b3ed;
             }
             .social-media-buttons {
                 flex-direction: row; /* Horizontal buttons on small screens */
@@ -98,6 +164,16 @@
             }
             .slider-container {
                 height: 200px; /* Smaller slider height on mobile */
+            }
+        }
+
+        /* Hide hamburger on larger screens */
+        @media (min-width: 769px) {
+            .hamburger-menu {
+                display: none;
+            }
+            .mobile-menu {
+                display: none; /* Hide mobile menu on larger screens */
             }
         }
 
@@ -410,6 +486,9 @@
 </head>
 <body class="bg-gray-100 text-gray-900 leading-relaxed antialiased">
     <div class="flex flex-col md:flex-row min-h-screen">
+        <!-- Hamburger Menu for Mobile -->
+        <button id="hamburgerMenu" class="hamburger-menu md:hidden">☰</button>
+
         <!-- Sidebar -->
         <aside class="aside aside-bg bg-white text-gray-800 border-r border-gray-200">
             <div class="flex flex-col items-center mb-8">
@@ -418,6 +497,7 @@
                 <p class="text-blue-600 font-semibold text-sm">CCTV & TECHNICIAN</p>
             </div>
 
+            <!-- Desktop Navigation -->
             <nav class="mb-8">
                 <ul class="aside-nav-list flex flex-col space-y-3">
                     <li><a href="#home" class="block py-2 px-4 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-800 text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors duration-200 hover-underline-grow">HOME</a></li>
@@ -829,6 +909,24 @@
         </main>
     </div>
 
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenu" class="mobile-menu md:hidden">
+        <button id="mobileMenuClose" class="mobile-menu-close">&times;</button>
+        <nav class="my-auto">
+            <ul class="mobile-nav-list flex flex-col space-y-4">
+                <li><a href="#home" class="hover-underline-grow">HOME</a></li>
+                <li><a href="#summary" class="hover-underline-grow">SUMMARY</a></li>
+                <li><a href="#experience" class="hover-underline-grow">WORKING PLACE</a></li>
+                <li><a href="#experience" class="hover-underline-grow">EXPERIENCE</a></li>
+                <li><a href="#education" class="hover-underline-grow">EDUCATION</a></li>
+                <li><a href="#skills" class="hover-underline-grow">CCTV SKILLS</a></li>
+                <li><a href="#projects" class="hover-underline-grow">MORE SKILLS</a></li>
+                <li><a href="#contact" class="hover-underline-grow">LANGUAGE</a></li>
+                <li><a href="#contact" class="hover-underline-grow">ABOUT ME</a></li>
+            </ul>
+        </nav>
+    </div>
+
     <!-- WeChat QR Code Modal HTML -->
     <div id="wechatQrModal" class="modal">
         <div class="modal-content">
@@ -842,7 +940,7 @@
     </div>
 
     <script>
-        // JavaScript for Dark Mode Toggle, Skill Bar Animation, Section Fade-in, Photo Slider, and WeChat QR Code Modal
+        // JavaScript for Dark Mode Toggle, Skill Bar Animation, Section Fade-in, Photo Slider, WeChat QR Code Modal, and Mobile Menu
 
         // Dark Mode Toggle
         const darkModeToggle = document.getElementById('darkModeToggle');
@@ -872,6 +970,12 @@
                     document.querySelector(this.getAttribute('href')).scrollIntoView({
                         behavior: 'smooth'
                     });
+
+                    // Close mobile menu if open
+                    const mobileMenu = document.getElementById('mobileMenu');
+                    if (mobileMenu && mobileMenu.classList.contains('active')) {
+                        mobileMenu.classList.remove('active');
+                    }
                 });
             });
 
@@ -1026,6 +1130,28 @@
                 link.click(); // Programmatically click the link to trigger download
                 document.body.removeChild(link); // Remove the temporary link
             });
+
+            // Mobile Menu Logic
+            const hamburgerMenu = document.getElementById('hamburgerMenu');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuClose = document.getElementById('mobileMenuClose');
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-list a');
+
+            if (hamburgerMenu && mobileMenu && mobileMenuClose) {
+                hamburgerMenu.addEventListener('click', () => {
+                    mobileMenu.classList.add('active');
+                });
+
+                mobileMenuClose.addEventListener('click', () => {
+                    mobileMenu.classList.remove('active');
+                });
+
+                mobileNavLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.remove('active'); // Close menu when a link is clicked
+                    });
+                });
+            }
         });
     </script>
 </body>
