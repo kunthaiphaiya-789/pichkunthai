@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pich Kunthai - CCTV Specialist</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Font - Inter -->
+    <link rel="icon" href="img/6.png" type="logo">>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for the Inter font and smooth transitions */
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow: hidden; /* Prevent body scroll, main content handles scroll */
+        }
+        body.dark {
+            background-color: #0055ff; /* Dark background */
+            color: #e2e8f0; /* Light text */
+        }
+        body.dark .aside-bg {
+            background-color: #b1b1b1; /* Darker sidebar background */
+            color: #fdfeff;
+            border-right-color: #4a5568;
+        }
+        body.dark .main-bg {
+            background-color: #999999; /* Darker main content background */
+        }
+        body.dark .text-gray-700 {
+            color: #000000;
+        }
+        body.dark .border-gray-200 {
+            border-color: #ffffff;
+        }
+        body.dark .text-blue-600 {
+            color: #63b3ed;
+        }
+        body.dark .interactive-card-hover:hover {
+            transform: translateY(-5px) scale(1.005) rotateX(1deg); /* Slight tilt in dark mode */
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.4), 0 5px 10px -2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Fixed Sidebar Styling */
+        .aside {
+            width: 420px; /* Fixed width for sidebar */
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto; /* Allow scrolling within the sidebar if content is long */
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        /* Main Content Area Styling */
+        .main-content {
+            margin-left: 420px; /* Offset for the fixed sidebar */
+            height: 100vh;
+            overflow-y: auto; /* Enable scrolling for main content */
+            padding: 2rem;
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 768px) {
+            .aside {
+                width: 100%;
+                height: auto;
+                position: relative;
+                box-shadow: none;
+                border-bottom: 1px solid #e2e8f0;
+            }
+            body.dark .aside {
+                border-bottom-color: #4a5568;
+            }
+            .main-content {
+                margin-left: 0;
+                padding-top: 1rem; /* Adjust padding after sidebar */
+            }
+            .aside-nav-list {
+                flex-direction: row; /* Horizontal navigation on small screens */
+                justify-content: space-around;
+                flex-wrap: wrap;
+            }
+            .aside-nav-list li {
+                margin-bottom: 0.5rem;
+                width: 45%; /* Two columns */
+                text-align: center;
+            }
+            .social-media-buttons {
+                flex-direction: row; /* Horizontal buttons on small screens */
+                justify-content: center;
+                gap: 0.75rem; /* Adjust gap for small screens */
+                margin-top: 1rem;
+            }
+            .slider-container {
+                height: 200px; /* Smaller slider height on mobile */
+            }
+        }
+
+        /* Profile image styling */
+        .profile-img {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .profile-img:hover {
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.5), 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+        body.dark .profile-img {
+            border-color: #63b3ed;
+            box-shadow: 0 0 0 4px rgba(99, 179, 237, 0.3);
+        }
+        body.dark .profile-img:hover {
+            box-shadow: 0 0 0 6px rgba(99, 179, 237, 0.5), 0 0 15px rgba(99, 179, 237, 0.5);
+        }
+
+        /* Skill Bar Styling */
+        .skill-bar {
+            height: 8px;
+            background-color: #e2e8f0;
+            border-radius: 9999px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        body.dark .skill-bar {
+            background-color: #4a5568;
+        }
+        .skill-progress {
+            height: 100%;
+            background-color: #f63b3b; /* Blue-600 */
+            width: 0%;
+            transition: width 1s ease-out;
+            border-radius: 9999px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Pulsating effect for skill bars */
+        @keyframes pulse-light {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+            70% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        @keyframes pulse-dark {
+            0% { box-shadow: 0 0 0 0 rgba(99, 179, 237, 0.4); }
+            70% { box-shadow: 0 0 0 8px rgba(99, 179, 237, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(99, 179, 237, 0); }
+        }
+        .skill-bar.is-visible .skill-progress {
+            animation: pulse-light 2s infinite;
+        }
+        body.dark .skill-bar.is-visible .skill-progress {
+            animation: pulse-dark 2s infinite;
+        }
+
+        /* Interactive Card Tilt Effect on Hover */
+        .interactive-card-hover {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            transform-style: preserve-3d;
+        }
+        .interactive-card-hover:hover {
+            transform: translateY(-8px) scale(1.01) rotateX(2deg);
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.2), 0 5px 10px -2px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Section Fade-in Animation */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Link Hover Effect (Underline Grow) */
+        .hover-underline-grow {
+            position: relative;
+            display: inline-block;
+            text-decoration: none;
+        }
+        .hover-underline-grow::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 100%;
+            height: 2px;
+            background-color: currentColor;
+            transform: scaleX(0);
+            transform-origin: bottom left;
+            transition: transform 0.3s ease-out;
+        }
+        .hover-underline-grow:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* Gradient Button Hover */
+        .gradient-button-hover {
+            background-image: linear-gradient(to right, #3b82f6 0%, #63b3ed 100%);
+            transition: background-position 0.4s ease-in-out, box-shadow 0.3s ease-in-out;
+            background-size: 200% auto;
+        }
+        .gradient-button-hover:hover {
+            background-position: right center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Section Header Border Accent Animation */
+        .section-header-border {
+            position: relative;
+            padding-bottom: 8px;
+        }
+        .section-header-border::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0%;
+            height: 3px;
+            background-color: #3b82f6;
+            transition: width 0.6s ease-out;
+        }
+        body.dark .section-header-border::after {
+            background-color: #63b3ed;
+        }
+        .fade-in-section.is-visible .section-header-border::after {
+            width: 100%;
+        }
+
+        /* Slider Specific Styles */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 300px; /* Adjust height as needed */
+            overflow: hidden;
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow-md */
+            margin-bottom: 1.5rem; /* mb-6 */
+        }
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            display: flex; /* For centering content */
+            align-items: center; /* For centering content */
+            justify-content: center; /* For centering content */
+        }
+        .slide.active {
+            opacity: 1;
+        }
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Cover the container, cropping if necessary */
+        }
+        .slider-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 9999px; /* full rounded */
+            cursor: pointer;
+            z-index: 20;
+            transition: background-color 0.3s ease;
+        }
+        .slider-nav-btn:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        .slider-nav-btn.prev {
+            left: 1rem;
+        }
+        .slider-nav-btn.next {
+            right: 1rem;
+        }
+        .slider-dots {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            z-index: 20;
+        }
+        .dot {
+            width: 10px;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+        .dot.active {
+            background-color: white;
+            border-color: white;
+        }
+        body.dark .slider-nav-btn {
+            background-color: rgba(255, 255, 255, 0.3);
+            color: #1a202c;
+        }
+        body.dark .slider-nav-btn:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+        body.dark .dot {
+            background-color: rgba(0, 0, 0, 0.3);
+            border-color: rgba(0, 0, 0, 0.5);
+        }
+        body.dark .dot.active {
+            background-color: #1a202c;
+            border-color: #e2e8f0;
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto;
+            text-align: center;
+        }
+        body.dark .modal-content {
+            background-color: #2d3748;
+            color: #e2e8f0;
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #4a5568;
+        }
+        body.dark .modal-close-btn {
+            color: #cbd5e0;
+        }
+        .modal-qr-img {
+            max-width: 250px; /* Adjust size as needed */
+            height: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+        body.dark .modal-qr-img {
+            border-color: #4a5568;
+        }
+        .modal-download-btn {
+            margin-top: 1.5rem;
+            padding: 0.75rem 1.5rem;
+            background-color: #3b82f6; /* Blue-600 */
+            color: white;
+            border: none;
+            border-radius: 9999px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .modal-download-btn:hover {
+            background-color: #2563eb; /* Blue-700 */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+        .modal-download-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-900 leading-relaxed antialiased">
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <!-- Sidebar -->
+        <aside class="aside aside-bg bg-white text-gray-800 border-r border-gray-200">
+            <div class="flex flex-col items-center mb-8">
+                <img src="img/6.png" alt="Profile Picture" class="profile-img mb-4">
+                <h2 class="text-2xl font-bold text-gray-800 mb-1">Pich Kunthai</h2>
+                <p class="text-blue-600 font-semibold text-sm">CCTV & TECHNICIAN</p>
+            </div>
+
+            <nav class="mb-8">
+                <ul class="aside-nav-list flex flex-col space-y-3">
+                    <li><a href="#home" class="block py-2 px-4 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-800 text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors duration-200 hover-underline-grow">HOME</a></li>
+                    <li><a href="#summary" class="block py-2 px-4 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-800 text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors duration-200 hover-underline-grow">SUMMARY</a></li>
+                    <li><a href="#experience" class="block py-2 px-4 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-800 text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors duration-200 hover-underline-grow">WORKING PLACE</a></li>
+                    <li><a href="#experience" class="block py-2 px-4 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-800 text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors duration-200 hover-underline-grow">EXPERIENCE</a></li>
+                    <li><a href="#education" class="block py-2 px-4 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-800 text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors duration-200 hover-underline-grow">EDUCATION</a></li>
+                    <li><a href="#skills" class="block py-2 px-4 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-800 text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors duration-200 hover-underline-grow">CCTV SKILLS</a></li>
+                    <li><a href="#projects" class="block py-2 px-4 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-800 text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors duration-200 hover-underline-grow">MORE SKILLS</a></li>
+                    <li><a href="#contact" class="block py-2 px-4 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-800 text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors duration-200 hover-underline-grow">LANGUAGE</a></li>
+                    <li><a href="#contact" class="block py-2 px-4 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-800 text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors duration-200 hover-underline-grow">ABOUT ME</a></li>
+                </ul>
+            </nav>
+            <p class="text-blue-600 font-semibold text-sm">My Data Info:</p>
+            <div class="my-info">
+                <p>-Full Name: PICH Kunthai</p>
+                <p>-Born: 10 January 1993</p>
+                <p>-Address: St. #1. Chipu, Bavet city, Svay Reing Province, Cambodia </p>
+                <p>-Phone:(+243) 907477194</p>
+                <p>-Website: <a href="https://linkedin.com/in/johndoe-cctv" target="_blank" class="hover-underline-grow text-blue-600">linkedin.com/in/johndoe-cctv</a></p>
+                <p>-Email: <a href="https://mail.google.com/" class="hover-underline-grow text-blue-600">kunthaiphaiya@gmail.com</p>
+                
+            </div>
+        </section>
+
+            <!-- Social Media Buttons -->
+ <div class="social-media-buttons flex flex-col items-center space-y-3 mb-6">
+    <a href="https://www.facebook.com/taitai.789" target="_blank" class="w-full px-4 py-2 rounded-full bg-blue-700 text-white text-sm font-semibold hover:bg-blue-800 transition-colors duration-200 shadow-md text-center">
+        Facebook
+    </a>
+    <!-- WeChat button to open QR code modal -->
+    <button id="wechatQrBtn" class="w-full px-4 py-2 rounded-full bg-green-500 text-white text-sm font-semibold hover:bg-green-600 transition-colors duration-200 shadow-md text-center interactive-card-hover">
+        WeChat (QR)
+    </button>
+    <a href=" https://wa.me/qr/ZICYDVJJ3CH3N1 " target="_blank" class="w-full px-4 py-2 rounded-full bg-green-600 text-white text-sm font-semibold hover:bg-green-700 transition-colors duration-200 shadow-md text-center">
+        WhatsApp
+    </a>
+    <a href="https://t.me/puthai789" target="_blank" class="w-full px-4 py-2 rounded-full bg-blue-400 text-white text-sm font-semibold hover:bg-blue-500 transition-colors duration-200 shadow-md text-center">
+        Telegram
+    </a>
+</div>
+
+
+            <div class="text-center text-gray-600 text-xs mt-auto">
+                <p>&copy; Copyright 2025 All rights reserved</p>
+                <p>Designed with ❤️ by Pich Kunthai</p>
+                <p>Demo Images: <a href="https://unsplash.com" target="_blank" class="hover-underline-grow text-blue-500">Unsplash.com</a></p>
+            </div>
+            <!-- Utility Buttons (Dark Mode Toggle and PDF Download) -->
+            <div class="flex flex-col items-center mt-6 space-y-3">
+                <button id="darkModeToggle" class="px-4 py-2 rounded-full text-white shadow-md gradient-button-hover interactive-card-hover text-sm w-full">
+                     Dark Mode
+                </button>
+                <!-- Modified to link to a PDF file -->
+                <a id="downloadPdfBtn" href="img/Pich%20Kuthai%20CV%20Resume.pdf" download="Pich_Kunthai_CCTV_Resume.pdf" 
+       class="flex items-center justify-center w-full px-4 py-2 rounded-full bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition-colors duration-200 shadow-md interactive-card-hover">
+        Download My CV
+    </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content main-bg bg-gray-100" id="main-content-to-pdf">
+            <div class="container mx-auto max-w-2xl lg:max-w-3xl">
+
+                <!-- Home/Introduction Section -->
+                <section id="home" class="bg-white rounded-xl shadow-lg p-8 mb-6 border border-gray-200 interactive-card-hover fade-in-section">
+                    <!-- Photo Slider -->
+                    <div class="slider-container">
+                        <div class="slide active">
+                            <img src="img/7.jpg" alt="CCTV Monitoring View">
+                        </div>
+                        <div class="slide">
+                            <img src="img/10.png" alt="Security System Installation">
+                        </div>
+                        <div class="slide">
+                            <img src="img/15.png" alt="Technical Maintenance">
+                        </div>
+                        <div class="slide">
+                            <img src="img/12.png" alt="Technical Maintenance">
+                        </div>
+                    
+                        <div class="slide">
+                            <img src="img/13.png" alt="Technical Maintenance">
+                        </div>
+                    </div>
+
+                        <button class="slider-nav-btn prev" aria-label="Previous Slide">&lt;</button>
+                        <button class="slider-nav-btn next" aria-label="Next Slide">&gt;</button>
+
+                        <div class="slider-dots">
+                            <span class="dot active" data-slide="0"></span>
+                            <span class="dot" data-slide="1"></span>
+                            <span class="dot" data-slide="2"></span>
+                            <span class="dot" data-slide="3"></span>
+                            <span class="dot" data-slide="4"></span>
+                        </div>
+                        </div>
+                        
+
+                    <h1 class="text-5xl font-extrabold text-gray-800 mb-4 section-header-border">Welcome I am Kunthai</h1>
+                    <p class="text-xl text-gray-700 mb-6 leading-relaxed">
+                       Nine to know you! 
+                    </p>
+                    <button class="px-6 py-3 rounded-full text-white shadow-lg gradient-button-hover interactive-card-hover font-semibold">
+                       Big Thankls You For Spent Valuable Time Reviewing my Information.
+                    </button>
+                </section>
+
+                <!-- Summary Section -->
+                <section id="summary" class="bg-white rounded-xl shadow-lg p-8 mb-6 border border-gray-200 interactive-card-hover fade-in-section">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4 section-header-border">Summary</h2>
+                    <p class="text-gray-700 leading-relaxed">
+                        Dedicated and technically proficient Surveillance Executive and Technician with 10 years of experience in monitoring, maintaining, and optimizing surveillance systems. Skilled in overseeing security operations, conducting investigations, and ensuring compliance with regulations. Expertise in installing, troubleshooting, and repairing CCTV systems, access control systems, and other security technologies. Strong leadership, analytical, and problem-solving skills with a proven ability to enhance security infrastructure and operational efficiency.
+                    </p>
+                </section>
+                <!-- Experience Section -->
+                <section id="experience" class="bg-white rounded-xl shadow-lg p-8 mb-6 border border-gray-200 interactive-card-hover fade-in-section">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4 section-header-border">Workig Place</h2>
+
+                    <!-- Job 1 -->
+                    <div class="mb-6 last:mb-0 pb-4 border-b border-gray-200 dark:border-gray-600 last:border-b-0">
+                      
+                        <div class="flex justify-between items-start mb-1">
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800">Executive & Technician in CAESARS Casino </h3>
+                                <p class="text-blue-600 font-medium">     At:  Kinshasa City ,(DRC) Congo Country.</p>
+                            </div>
+                            <p class="text-gray-600 text-sm sm:text-base">Apr 2024 – Present</p>
+                            </div>
+
+                            <div class="flex justify-between items-start mb-1">
+                                <div>
+                                    <h3 class="text-xl font-semibold text-gray-800">Executive & Technician in SAND PALACE  Casino & Hotel </h3>
+                                    <p class="text-blue-600 font-medium">     At:  Poipet City ,Cambodia Country.</p>
+                                </div>
+                                <p class="text-gray-600 text-sm sm:text-base">Nov 2022 – Mar 2024</p>
+                                </div>
+                                <div class="flex justify-between items-start mb-1">
+                                    <div>
+                                        <h3 class="text-xl font-semibold text-gray-800">Executive & Technician in OU NEANG INTERNATIONAL Casino </h3>
+                                        <p class="text-blue-600 font-medium">     At:  Poipet City ,Cambodia Country.</p>
+                                    </div>
+                                    <p class="text-gray-600 text-sm sm:text-base">Feb 2022 – Oct 2022</p>
+                                    </div><div class="flex justify-between items-start mb-1">
+                                        <div>
+                                            <h3 class="text-xl font-semibold text-gray-800">Executive & Technician in CAESARS Casino </h3>
+                                            <p class="text-blue-600 font-medium">     At:  Kinshasa City ,(DRC) Congo Country.</p>
+                                        </div>
+                                        <p class="text-gray-600 text-sm sm:text-base">Nov 2016 – Dec 2021</p>
+                                        </div>
+        
+                </section>
+
+                <!-- Experience Section -->
+                <section id="experience" class="bg-white rounded-xl shadow-lg p-8 mb-6 border border-gray-200 interactive-card-hover fade-in-section">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4 section-header-border">Experience</h2>
+
+                    <!-- Job 1 -->
+                    <div class="mb-6 last:mb-0 pb-4 border-b border-gray-200 dark:border-gray-600 last:border-b-0">
+                      
+                        <div class="flex justify-between items-start mb-1">
+                            
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800">Surveillance Executive</h3>
+                                <p class="text-blue-600 font-medium">Global Security Solutions</p>
+                            </div>
+                            <p class="text-gray-600 text-sm sm:text-base"></p>
+                        </div>
+                        <ul class="list-disc list-inside text-gray-700 ml-4 space-y-1">
+                            <li>Conducted 24/7 real-time monitoring of over 100 CCTV cameras across multiple locations, identifying and reporting suspicious activities.</li>
+                            <li>Coordinated with security personnel and law enforcement during critical incident response, providing timely video evidence.</li>
+                            <li>Managed and maintained digital video recording (DVR) and network video recording (NVR) systems, ensuring continuous operation and data integrity.</li>
+                            <li>Generated comprehensive daily and incident reports, detailing observations and actions taken for management review.</li>
+                            <li>Manage and oversee the daily operations of the central control room and the surveillance team.</li>
+                            <li>Monitor live and recorded video feeds in a multi-camera environment to identify and respond to suspicious activities, security breaches, and emergencies.</li>
+                            <li>Develop, implement, and enforce standard operating procedures (SOPs) for surveillance monitoring, incident reporting, and data handling.</li>
+                            <li>Coordinate closely with on-ground security personnel and law enforcement agencies to respond to incidents in real-time.</li>
+                            <li>Prepare detailed and accurate incident reports, activity logs, and audit trails for management review.</li>
+                            <li>Analyze footage to assist in internal investigations, loss prevention, and safety compliance audits.</li>
+                            <li>Liaise with IT and technical teams to ensure the CCTV system's health, functionality, and cybersecurity, escalating technical issues promptly.</li>
+                            <li>Manage the archiving and storage of video data in compliance with legal and company policies.</li>
+                            <li>Conduct regular team training on new technologies, monitoring techniques, and emergency response protocols.</li>
+                            <li>Evaluate and recommend new surveillance technologies and software to enhance system capabilities and efficiency.</li>
+                            <li>Manage the surveillance department's budget, including costs for maintenance, upgrades, and licensing.</li>
+                            <li>Any thing else.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Job 2 -->
+                    <div class="mb-6 last:mb-0 pb-4 border-b border-gray-200 dark:border-gray-600 last:border-b-0">
+                        <div class="flex justify-between items-start mb-1">
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800">CCTV Technician</h3>
+                                <p class="text-blue-600 font-medium">Responsibilities</p>
+                            </div>
+                            <p class="text-gray-600 text-sm sm:text-base"></p>
+                        </div>
+                        <ul class="list-disc list-inside text-gray-700 ml-4 space-y-1">
+                            <li>Install, configure, and commission new CCTV systems, including IP and analog cameras, DVRs/NVRs, monitors, and related hardware.</li>
+                            <li>Run and terminate coaxial, UTP, and fiber optic cabling in commercial and industrial environments.</li>
+                            <li>Perform routine preventative maintenance and system inspections to ensure continuous operation.</li>
+                            <li>Diagnose and troubleshoot system hardware, software, and network connectivity issues efficiently.</li>
+                            <li>Program and configure system settings, including motion detection, recording schedules, and user access.</li>
+                            <li>Provide technical support and training to clients on the operation of their surveillance equipment.</li>
+                            <li>Complete detailed service reports and documentation for all installations and service calls.</li>
+                            <li>Adhere to all safety standards and protocols on job sites.</li>
+                            <li>Stay current with the latest technologies and products in the video surveillance industry.</li>
+                            <li>Any thing else.</li>
+                            
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Education Section (Can be tailored if relevant certifications exist) -->
+                <section id="education" class="bg-white rounded-xl shadow-lg p-8 mb-6 border border-gray-200 interactive-card-hover fade-in-section">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4 section-header-border">Education & Certifications</h2>
+                    <div class="mb-4 last:mb-0 pb-4 border-b border-gray-200 dark:border-gray-600 last:border-b-0">
+                        <div class="flex justify-between items-start mb-1">
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800">Cambodia Mekong University </h3>
+                                <p class="text-blue-600 font-medium">University of Science in Computer Information Technology</p>
+                            </div>
+                            <p class="text-gray-600 text-sm sm:text-base">Nov 2012 – May 2016</p>
+                        </div>
+                        <p class="text-gray-700">Third Years, Certifications ( No )</p>
+                    </div>
+                    <div class="mb-4 last:mb-0 pb-4 border-b border-gray-200 dark:border-gray-600 last:border-b-0">
+                        <div class="flex justify-between items-start mb-1">
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800">Chipou Hight School </h3>
+                                <p class="text-blue-600 font-medium">Security Industry Association</p>
+                            </div>
+                            <p class="text-gray-600 text-sm sm:text-base">2001 - 2012</p>
+                        </div>
+                        <p class="text-gray-700">Grande 12, Certifications ( Yes ).</p>
+                    </div>
+                </section>
+
+                <!-- Skills Section -->
+                <section id="skills" class="bg-white rounded-xl shadow-lg p-8 mb-6 border border-gray-200 interactive-card-hover fade-in-section">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4 section-header-border">Skills</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-gray-700">
+                        <div>
+                            <h4 class="font-semibold mb-2">CCTV Systems:</h4>
+                            <p>IP Cameras, Analog Cameras, PTZ, Dome, Bullet, Thermal Cameras, Fisheye</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">Equipment & Software:</h4>
+                            <p>DVR/NVR, VMS (Video Management Software), Access Control, Alarm Systems, Biometrics</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">Technical Skills:</h4>
+                            <p>Installation, Troubleshooting, Maintenance, Network Configuration (LAN/WAN), Cabling (Coax, Ethernet), System Integration</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">Surveillance & Security:</h4>
+                            <p>Real-time Monitoring, Incident Response, Evidence Collection, Data Retention, Security Protocols, Risk Assessment</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">Tools:</h4>
+                            <p>Multimeters, Cable Testers, OS (Windows/Linux), Diagnostic Software</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">Soft Skills:</h4>
+                            <p>Attention to Detail, Critical Thinking, Report Writing, Communication, Problem-Solving, Team Collaboration</p>
+                        </div>
+                    </div>
+
+                    <!-- Skill Progress Bars (Example - adapted for CCTV skills) -->
+                    <h4 class="font-bold text-gray-800 mt-8 mb-4">Skill Proficiency (Interactive)</h4>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="mb-1 text-sm font-medium">CCTV System Installation</p>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="90"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="mb-1 text-sm font-medium">Real-time Monitoring</p>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="93"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="mb-1 text-sm font-medium">Troubleshooting & Maintenance</p>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="95"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Projects Section (Can be tailored to CCTV-related projects) -->
+                <section id="projects" class="bg-white rounded-xl shadow-lg p-8 mb-6 border border-gray-200 interactive-card-hover fade-in-section">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4 section-header-border">Other Skill</h2>
+
+                    <!-- Project 1 -->
+                    <div class="mb-6 last:mb-0 pb-4 border-b border-gray-200 dark:border-gray-600 last:border-b-0">
+                        <h3 class="text-xl font-semibold text-gray-800">EGT Digital Slot Company</h3>
+                        <p>Website: <a href="https://egt-digital.com/" target="_blank" class="hover-underline-grow text-blue-600">https://egt-digital.com/</a></p>
+                        <h2>Key Responsibilities:</h2>
+                        <p class="text-blue-600 font-medium mb-2">Intalling Hardware, Software and Fixing error alarms  </p>
+                        <p class="text-gray-700 leading-relaxed">
+
+                            EGT Digital is the digital arm of Euro Games Technology (EGT), a well-known Bulgarian company in the gaming industry. While the parent company, EGT, has a long history of developing both land-based and online casino games, EGT Digital focuses specifically on providing iGaming solutions, with a strong emphasis on online slots.</p>
+                    </div>
+                    
+
+                    <!-- Project 2 -->
+                    <div class="mb-6 last:mb-0 pb-4 border-b border-gray-200 dark:border-gray-600 last:border-b-0">
+                        <h3 class="text-xl font-semibold text-gray-800">Generator</h3>
+                        <p class="text-blue-600 font-medium mb-2">Setup Machine,Connetion Line, Connetion ATS, Checking Smart Gen Controller and Create HTTL for Daily Report</p>
+                        <p class="text-gray-700 leading-relaxed">In the context of backup power systems, the term "Generator of Function" refers to the primary role and operational purpose of a generator set (genset). It defines the generator not just as a machine that produces electricity, but as a integrated system component designed to execute a specific, critical function automatically.</p>
+                       
+                    </div>
+                    <!-- Project 3 -->
+                    <div class="mb-6 last:mb-0 pb-4 border-b border-gray-200 dark:border-gray-600 last:border-b-0">
+                        <h3 class="text-xl font-semibold text-gray-800">Electricity</h3>
+                        <p class="text-blue-600 font-medium mb-2">Know of Electrical System </p>
+                        <p class="text-gray-700 leading-relaxed">Of course. Connecting electricity to a company, factory, or commercial building is a significant project that involves careful planning, coordination with utility providers, and often, working with professional contractors.</p>
+                        
+                    </div>
+                    <!-- Project 4 -->
+                    <div class="mb-6 last:mb-0 pb-4 border-b border-gray-200 dark:border-gray-600 last:border-b-0">
+                        <h3 class="text-xl font-semibold text-gray-800">Computer</h3>
+                        <p class="text-blue-600 font-medium mb-2">Installing Hardware and Software</p>
+                        <p class="mb-1 text-sm font-medium">Microsoft Office</p>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="90"></div>
+                            </div>
+                            <p class="mb-1 text-sm font-medium">Hardware</p>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="75"></div>
+                            </div>
+                            <p class="mb-1 text-sm font-medium">Software</p>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="85"></div>
+                            </div>
+                            <p class="mb-1 text-sm font-medium">Editor Video and Photo</p>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="80"></div>
+                            </div>
+                            <p class="mb-1 text-sm font-medium">Setup TV Promotion </p>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="90"></div>
+                            </div>
+                            <p class="mb-1 text-sm font-medium">Web Deverloper </p>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="40"></div>
+                            </div>
+                            <p class="mb-1 text-sm font-medium">Sound setup</p>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="82"></div>
+                            </div>
+                            <p class="mb-1 text-sm font-medium">Audio Recording </p>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="90"></div>
+                            </div>
+                    </div>
+                </section>
+
+                
+                <!-- Projects Section (Can be tailored to CCTV-related projects) -->
+                <section id="projects" class="bg-white rounded-xl shadow-lg p-8 mb-6 border border-gray-200 interactive-card-hover fade-in-section">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4 section-header-border">Language</h2>
+
+                    
+                    <!-- Project 4 -->
+                    <div class="mb-6 last:mb-0 pb-4 border-b border-gray-200 dark:border-gray-600 last:border-b-0">
+                        <p class="mb-1 text-sm font-medium">Khmer</p>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="100"></div>
+                            </div>
+                            <p class="mb-1 text-sm font-medium">English</p>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="65"></div>
+                            </div>
+                            <p class="mb-1 text-sm font-medium">Chines</p>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="30"></div>
+                            </div>
+                            <p class="mb-1 text-sm font-medium">France</p>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="20"></div>
+                            </div>
+                            
+                    </div>
+                </section>
+
+                <!-- Contact Section -->
+
+                <!-- Contact Section -->
+                <section id="contact" class="bg-white rounded-xl shadow-lg p-8 mb-6 border border-gray-200 interactive-card-hover fade-in-section">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4 section-header-border">About Me</h2>
+                    <p class="text-gray-700 leading-relaxed mb-4">
+                        I am a reliable, patient, and hard-working individual with a strong passion for continuous learning. I thrive in both collaborative team environments and when working independently on focused tasks. My drive to acquire new skills is matched by my creative side, which I express through music, playing the guitar and piano. Outside of work, I enjoy expanding my knowledge through reading, listening to music, and exploring the digital world.For work ethic: "A dedicated and patient professional who values reliability."
+
+                        For teamwork: "I enjoy collaborating with a team to achieve common goals, while also being capable and productive when working independently."
+                        
+                        For learning: "I possess a strong passion for continuous learning and personal development."
+                        
+                        For hobbies: "My creative outlet is found in music, both playing the guitar/piano and singing. I also enjoy spending my free time reading, listening to music, and researching interests online."
+                        
+                    </p>
+                    
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- WeChat QR Code Modal HTML -->
+    <div id="wechatQrModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="wechatCloseModal">&times;</button>
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Scan my WeChat QR Code</h3>
+            <!-- Important: Replace 'https://placehold.co/250x250/a8dadc/1f2937?text=WeChat+QR' with your actual QR code image URL -->
+            <img src="img/6.jpg" alt="WeChat QR Code" class="modal-qr-img mx-auto" id="wechatQrImg">
+            <p class="text-gray-700 mt-4">Add me on WeChat to connect!</p>
+            <button id="downloadQrCodeBtn" class="modal-download-btn">Download Image</button>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for Dark Mode Toggle, Skill Bar Animation, Section Fade-in, Photo Slider, and WeChat QR Code Modal
+
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark');
+            // Store user preference in localStorage
+            if (body.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Check for saved theme preference on load
+        document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('theme') === 'dark') {
+                body.classList.add('dark');
+            }
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Skill Bar Animation using IntersectionObserver
+            const skillProgressBars = document.querySelectorAll('.skill-progress');
+            const skillBarObservers = [];
+
+            const skillBarOptions = {
+                root: null, // viewport
+                rootMargin: '0px',
+                threshold: 0.8 // 80% of the skill bar must be visible
+            };
+
+            skillProgressBars.forEach(bar => {
+                const skillBarContainer = bar.closest('.skill-bar');
+
+                const observer = new IntersectionObserver((entries, observerInstance) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const progress = entry.target.dataset.progress;
+                            entry.target.style.width = progress + '%';
+                            skillBarContainer.classList.add('is-visible');
+                            // observerInstance.unobserve(entry.target); // Optional: only animate once
+                        } else {
+                            entry.target.style.width = '0%';
+                            skillBarContainer.classList.remove('is-visible');
+                        }
+                    });
+                }, skillBarOptions);
+                observer.observe(bar);
+                skillBarObservers.push(observer);
+            });
+
+
+            // Section Fade-in Animation using IntersectionObserver
+            const sections = document.querySelectorAll('.fade-in-section');
+            const sectionObservers = [];
+
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: '0px',
+                threshold: 0.1 // 10% of the section must be visible
+            };
+
+            sections.forEach(section => {
+                const observer = new IntersectionObserver((entries, observerInstance) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            // observerInstance.unobserve(entry.target); // Optional: stop observing once it's visible
+                        } else {
+                            // entry.target.classList.remove('is-visible'); // Optional: remove visible class if it leaves the viewport
+                        }
+                    });
+                }, observerOptions);
+                observer.observe(section);
+                sectionObservers.push(observer);
+            });
+
+
+            // Photo Slider Logic
+            const slides = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('.dot');
+            const prevBtn = document.querySelector('.slider-nav-btn.prev');
+            const nextBtn = document.querySelector('.slider-nav-btn.next');
+            let currentSlide = 0;
+            let slideInterval;
+
+            function showSlide(index) {
+                // Deactivate current slide and dot
+                slides[currentSlide].classList.remove('active');
+                dots[currentSlide].classList.remove('active');
+
+                // Update currentSlide index
+                currentSlide = (index + slides.length) % slides.length;
+
+                // Activate new slide and dot
+                slides[currentSlide].classList.add('active');
+                dots[currentSlide].classList.add('active');
+            }
+
+            function nextSlide() {
+                showSlide(currentSlide + 1);
+            }
+
+            function prevSlide() {
+                showSlide(currentSlide - 1);
+            }
+
+            // Event Listeners for buttons
+            if (prevBtn) prevBtn.addEventListener('click', () => {
+                clearInterval(slideInterval); // Stop auto-play on manual navigation
+                prevSlide();
+                startAutoPlay(); // Restart auto-play
+            });
+            if (nextBtn) nextBtn.addEventListener('click', () => {
+                clearInterval(slideInterval);
+                nextSlide();
+                startAutoPlay();
+            });
+
+            // Event Listeners for dots
+            dots.forEach(dot => {
+                dot.addEventListener('click', (e) => {
+                    const slideIndex = parseInt(e.target.dataset.slide);
+                    clearInterval(slideInterval);
+                    showSlide(slideIndex);
+                    startAutoPlay();
+                });
+            });
+
+            function startAutoPlay() {
+                // Clear any existing interval to prevent duplicates
+                clearInterval(slideInterval);
+                // Start a new interval for auto-play
+                slideInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
+            }
+
+            // Initialize slider and start auto-play
+            showSlide(0); // Show the first slide
+            startAutoPlay(); // Start auto-play
+
+            // WeChat QR Code Modal Logic
+            const wechatQrBtn = document.getElementById('wechatQrBtn');
+            const wechatQrModal = document.getElementById('wechatQrModal');
+            const wechatCloseModal = document.getElementById('wechatCloseModal');
+            const wechatQrImg = document.getElementById('wechatQrImg'); // Get the QR code image element
+            const downloadQrCodeBtn = document.getElementById('downloadQrCodeBtn'); // Get the new download button
+
+            wechatQrBtn.addEventListener('click', () => {
+                wechatQrModal.classList.add('show');
+            });
+
+            wechatCloseModal.addEventListener('click', () => {
+                wechatQrModal.classList.remove('show');
+            });
+
+            // Close modal if clicking outside the content
+            wechatQrModal.addEventListener('click', (e) => {
+                if (e.target === wechatQrModal) {
+                    wechatQrModal.classList.remove('show');
+                }
+            });
+
+            // Download QR Code Image Logic
+            downloadQrCodeBtn.addEventListener('click', () => {
+                const imageUrl = wechatQrImg.src; // Get the URL of the QR code image
+                const link = document.createElement('a'); // Create a temporary anchor element
+                link.href = imageUrl;
+                link.download = 'wechat_qr_code.png'; // Suggested filename for download
+                document.body.appendChild(link); // Append to body (required for Firefox)
+                link.click(); // Programmatically click the link to trigger download
+                document.body.removeChild(link); // Remove the temporary link
+            });
+        });
+    </script>
+</body>
+</html>
