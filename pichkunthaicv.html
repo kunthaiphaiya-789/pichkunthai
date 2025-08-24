@@ -80,6 +80,8 @@
             align-items: center;
             transform: translateX(100%); /* Start off-screen to the right */
             transition: transform 0.4s ease-in-out;
+            padding: 1rem; /* Add padding for mobile content */
+            box-sizing: border-box; /* Include padding in width/height */
         }
         body.dark .mobile-menu {
             background-color: rgba(45, 55, 72, 0.95); /* Darker semi-transparent */
@@ -156,14 +158,28 @@
             body.dark .hamburger-menu {
                 background-color: #63b3ed;
             }
-            .social-media-buttons {
-                flex-direction: row; /* Horizontal buttons on small screens */
-                justify-content: center;
-                gap: 0.75rem; /* Adjust gap for small screens */
-                margin-top: 1rem;
+            /* Social media buttons in mobile menu */
+            .mobile-social-media-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+                margin-top: 2rem;
+                width: 80%; /* Adjust width for mobile */
+                max-width: 300px; /* Max width for buttons */
             }
-            .slider-container {
-                height: 200px; /* Smaller slider height on mobile */
+            .mobile-social-media-buttons a, .mobile-social-media-buttons button {
+                width: 100%;
+                padding: 0.75rem 1rem;
+                border-radius: 9999px;
+                font-size: 1rem;
+                font-weight: 600;
+                text-align: center;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+            .mobile-social-media-buttons a:hover, .mobile-social-media-buttons button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             }
         }
 
@@ -925,6 +941,21 @@
                 <li><a href="#contact" class="hover-underline-grow">ABOUT ME</a></li>
             </ul>
         </nav>
+        <!-- Social Media Buttons for Mobile Menu -->
+        <div class="mobile-social-media-buttons">
+            <a href="https://www.facebook.com/taitai.789" target="_blank" class="bg-blue-700 text-white">
+                Facebook
+            </a>
+            <button id="wechatQrBtnMobile" class="bg-green-500 text-white">
+                WeChat (QR)
+            </button>
+            <a href=" https://wa.me/qr/ZICYDVJJ3CH3N1 " target="_blank" class="bg-green-600 text-white">
+                WhatsApp
+            </a>
+            <a href="https://t.me/puthai789" target="_blank" class="bg-blue-400 text-white">
+                Telegram
+            </a>
+        </div>
     </div>
 
     <!-- WeChat QR Code Modal HTML -->
@@ -1104,10 +1135,25 @@
             const wechatCloseModal = document.getElementById('wechatCloseModal');
             const wechatQrImg = document.getElementById('wechatQrImg'); // Get the QR code image element
             const downloadQrCodeBtn = document.getElementById('downloadQrCodeBtn'); // Get the new download button
+            
+            // New: WeChat QR button for mobile menu
+            const wechatQrBtnMobile = document.getElementById('wechatQrBtnMobile');
+
 
             wechatQrBtn.addEventListener('click', () => {
                 wechatQrModal.classList.add('show');
             });
+
+            if (wechatQrBtnMobile) {
+                wechatQrBtnMobile.addEventListener('click', () => {
+                    wechatQrModal.classList.add('show');
+                     // Close mobile menu if open
+                    const mobileMenu = document.getElementById('mobileMenu');
+                    if (mobileMenu && mobileMenu.classList.contains('active')) {
+                        mobileMenu.classList.remove('active');
+                    }
+                });
+            }
 
             wechatCloseModal.addEventListener('click', () => {
                 wechatQrModal.classList.remove('show');
